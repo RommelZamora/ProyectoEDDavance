@@ -1,0 +1,3 @@
+¿Es este un animal mamifero?
+¿Es este un animal carnivoro?
+¿Se para este animal sobre cuatro patas?
