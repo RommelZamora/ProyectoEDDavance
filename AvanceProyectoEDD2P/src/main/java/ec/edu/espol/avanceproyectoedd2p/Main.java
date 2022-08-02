@@ -4,6 +4,8 @@
  */
 package ec.edu.espol.avanceproyectoedd2p;
 
+import java.util.ArrayList;
+import java.util.Map;
 import model.Juego;
 
 /**
@@ -20,7 +22,22 @@ public class Main {
         
         Juego juego = new Juego(dir+"preguntas.txt", dir+"respuestas.txt");
         
-        juego.obtenerDatos();
+        Map<String, ArrayList<String>> mapa = juego.obtenerDatos();
+        System.out.println(mapa);
+        
+        System.out.println("\n-----------Arbol Creado-----------\n");
+        //System.out.println(mapa.get("Respuestas").toString());
+        //System.out.println(juego.crearArbol(mapa).preOrderTraversalRecursive().toString());
+        
+        //Iterator<Map.Entry<String, Integer>> itr = mapa.entrySet().iterator();
+        //while(itr.hasNext()){
+        //    Map.Entry<String, Integer> entry = itr.next();
+        //    System.out.println(entry.getKey() + "|" + entry.getValue());
+        //}
+        
+        
+        
+        juego.crearArbol(mapa);
     }
     
 }

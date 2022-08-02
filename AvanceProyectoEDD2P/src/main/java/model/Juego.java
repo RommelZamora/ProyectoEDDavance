@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -71,7 +72,7 @@ public class Juego {
                 pregunta = readerPreguntas.readLine();
             }
             
-            //System.out.println("--------Respuestas:--------");
+            //System.out.println("--------RESPUESTAS:--------");
             while (respuesta != null) {
                 mapa.get("Respuestas").add(respuesta);
                 //System.out.println(respuesta);
@@ -83,13 +84,35 @@ public class Juego {
             readerPreguntas.close();
             readerRespuestas.close();
             
-        }catch(Exception e){
+        }catch(IOException e){
             System.out.println("No se pudo abrir los archivos: ");
 	}
         
-        System.out.println(mapa.toString());
-        
         return mapa;
+    }
+    
+    public BinaryTree<JuegoDatos> crearArbol(Map<String, ArrayList<String>> mapaDatos){
+        BinaryTree<JuegoDatos> arbol = new BinaryTree<>();
+        Map<String, ArrayList<String>> mapaAnimales = new HashMap<>();
+        
+        for(String animal : mapaDatos.get("Respuestas")){
+            String[] lista = animal.split(" ");
+            for(int i=0; i<lista.length; i++){
+                if(i==0){
+                    mapaAnimales.put(lista[i],new ArrayList<>());
+                }else{
+                    mapaAnimales.get(lista[0]).add(lista[i]);
+                }
+            }
+        }
+        
+        ArrayList<BinaryTree<JuegoDatos>> arregloArbolesBase = new ArrayList<>();
+        
+        
+        
+        
+        System.out.println(mapaAnimales.toString());
+        return arbol;
     }
     
     
@@ -98,32 +121,33 @@ public class Juego {
     
     class JuegoDatos{
         private String pregunta;
-        private boolean respuesta;
+        private ArrayList<String> animales;
 
-        public JuegoDatos(String pregunta) {
+        public JuegoDatos(String pregunta, String animales) {
             this.pregunta = pregunta;
-            this.respuesta=true;
+            this.animales = new ArrayList<>();
         }
 
         public String getPregunta() {
             return pregunta;
         }
-
-        public boolean getRespuesta() {
-            return respuesta;
+        
+        public ArrayList<String> getAnimales() {
+            return animales;
         }
 
         public void setPregunta(String pregunta) {
             this.pregunta = pregunta;
         }
 
-        public void setRespuesta(boolean respuesta) {
-            this.respuesta = respuesta;
+        public void setAnimales(ArrayList<String> animales) {
+            this.animales = animales;
         }
         
+        public void addAnimal(String animales){
+            this.animales.add(animales);
+        }
         
-        
-    
     }
     
 }
