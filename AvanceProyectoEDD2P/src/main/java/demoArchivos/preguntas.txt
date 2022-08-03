@@ -1,3 +1,3 @@
-¿Es este un animal mamifero?
-¿Es este un animal carnivoro?
-¿Se para este animal sobre cuatro patas?
+Â¿Es este animal un mamÃ­fero?
+Â¿Es este animal un carnÃ­voro?
+Â¿Se para este animal sobre cuatro patas?

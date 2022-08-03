@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import TDAs.BinaryTree;
@@ -35,7 +30,7 @@ public class Juego {
         this.txtPreguntas = filePreguntas.getName();
         this.txtRespuestas = fileRespuestas.getName();
         
-        this.datosJuego= new BinaryTree<JuegoDatos>();
+        this.datosJuego= new BinaryTree<>();
     }
 
     public Juego(String pathArchivoPreguntas, String pathArchivoRespuestas) {
@@ -45,7 +40,7 @@ public class Juego {
         this.txtRespuestas = fileRespuestas.getName();
         this.txtPreguntas = filePreguntas.getName();
         
-        this.datosJuego= new BinaryTree<JuegoDatos>();
+        this.datosJuego= new BinaryTree<>();
     }
     
     public Map<String, ArrayList<String>> obtenerDatos(){
