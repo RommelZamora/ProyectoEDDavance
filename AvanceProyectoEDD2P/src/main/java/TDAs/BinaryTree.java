@@ -36,11 +36,11 @@ public class BinaryTree<E> {
         this.root = root;
     }
 
-    public void setLeft(BinaryTree tree) {
+    public void setLeft(BinaryTree<E> tree) {
         this.root.setLeft(tree);
     }
 
-    public void setRight(BinaryTree tree) {
+    public void setRight(BinaryTree<E> tree) {
         this.root.setRight(tree);
     }
 
@@ -50,6 +50,18 @@ public class BinaryTree<E> {
 
     public BinaryTree getRight() {
         return this.root.getRight();
+    }
+    
+    public boolean hasChildren(){
+        return this.root.getLeft()!=null || this.root.getRight()!=null;
+    }
+    
+    public boolean hasLeft(){
+        return this.root.getLeft()!=null;
+    }
+    
+    public boolean hasRight(){
+        return this.root.getRight()!=null;
     }
 
     public LinkedList<E> preOrderTraversalRecursive() {
