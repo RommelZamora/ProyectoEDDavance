@@ -225,12 +225,12 @@ public class Juego {
             for(String siNo : entry.getValue()){
                 cont++;
                 if(cont==mapaDatos.get("Preguntas").size()){
-                    if(siNo.equals("si")){
+                    if(siNo.toUpperCase().equals("SI")){
                         if(temp.hasLeft()){
                             temp=temp.getLeft();
                             temp.getRootContent().addAnimal(entry.getKey());
                         }else{
-                            temp.setLeft(new BinaryTree<>(new JuegoDatos("Hoja de "+entry.getKey())));
+                            temp.setLeft(new BinaryTree<>(new JuegoDatos("Hoja de respuesta "+entry.getKey())));
                             temp=temp.getLeft();
                             temp.getRootContent().addAnimal(entry.getKey());
                         }
@@ -239,13 +239,13 @@ public class Juego {
                             temp=temp.getRight();
                             temp.getRootContent().addAnimal(entry.getKey());
                         }else{
-                            temp.setRight(new BinaryTree<>(new JuegoDatos("Hoja de "+entry.getKey())));
+                            temp.setRight(new BinaryTree<>(new JuegoDatos("Hoja de respuesta "+entry.getKey())));
                             temp=temp.getRight();
                             temp.getRootContent().addAnimal(entry.getKey());
                         }
                     }
                 }else{
-                    if(siNo.equals("si")){
+                    if(siNo.toUpperCase().equals("SI")){
                         if(temp.hasLeft()){
                             temp=temp.getLeft();
                             temp.getRootContent().addAnimal(entry.getKey());
@@ -344,6 +344,7 @@ public class Juego {
             StringBuilder sb = new StringBuilder();
             sb.append("JuegoDatos{");
             sb.append("pregunta=").append(pregunta);
+            sb.append(", textOutput=").append(textoOutput);
             sb.append(", animales=").append(animales);
             sb.append('}');
             return sb.toString();
