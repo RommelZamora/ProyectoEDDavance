@@ -28,6 +28,9 @@ public class Main {
         }catch(Exception e){
             System.out.println(e);
         }
+        
+        
+        
 //        Map<String, ArrayList<String>> mapa = juego.obtenerDatos();
 //        juego.obtenerDatos();
 //        BinaryTree<JuegoDatos> arbol = juego.crearArbol(mapa);

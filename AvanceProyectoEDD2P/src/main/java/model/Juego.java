@@ -91,7 +91,7 @@ public class Juego {
 
     public BinaryTree<String> crearArbol() {
         BinaryTree<String> arbol = crearArbol(0);
-        llenaAnimal(arbol);
+        llenaAnimalV2(arbol);
         return arbol;
     }
 
@@ -147,6 +147,33 @@ public class Juego {
             arbol.setRight(new BinaryTree("Perro"));
         }
     }
+    
+    private void llenaAnimalV2(BinaryTree<String> arbol){
+        for (Map.Entry<String, ArrayList<String>> entry : mapaAnimales.entrySet()) {
+            
+            BinaryTree<String> temp = arbol;
+            int cont=1;
+            for(String resp : entry.getValue()){
+                if(cont < entry.getValue().size()){
+                    if(resp.toUpperCase().equals("SI")){
+                        temp=temp.getLeft();
+                    }else if(resp.toUpperCase().equals("NO")){
+                        temp=temp.getRight();
+                    }
+                }else{
+                    if(resp.toUpperCase().equals("SI")){
+                        temp.setLeft(new BinaryTree<>(entry.getKey()));
+                    }else if(resp.toUpperCase().equals("NO")){
+                        temp.setRight(new BinaryTree<>(entry.getKey()));
+                    }
+                }
+                cont++;
+            }
+            
+        }
+    }
+    
+    
 
     /**
      * Generates a map with the directions of every animal in the tree.
