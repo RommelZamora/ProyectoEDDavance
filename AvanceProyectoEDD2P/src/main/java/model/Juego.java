@@ -1,12 +1,14 @@
 package model;
 
 import TDAs.BinaryTree;
+import Util.TreePrinter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -54,6 +56,7 @@ public class Juego {
         return respuestas;
     }
 
+    //Abre los archivos de preguntas y respuestas para devolver un mapa con el formato: <"Preguntas":[ArrayList<String>], "Respuestas":[ArrayList<String>]>
     private void obtenerDatos() {
         BufferedReader readerPreguntas;
         BufferedReader readerRespuestas;
@@ -88,7 +91,7 @@ public class Juego {
 
     public BinaryTree<String> crearArbol() {
         BinaryTree<String> arbol = crearArbol(0);
-        llenaAnimal(arbol);
+        llenaAnimales(arbol);
         return arbol;
     }
 
@@ -102,32 +105,56 @@ public class Juego {
         }
         return arbol;
     }
-    
-    private void llenaAnimal(BinaryTree<String> arbol){
+
+    private void llenaAnimales(BinaryTree<String> arbol) {
+        BinaryTree<String> arbolL;
+        for (String animal : mapaAnimales.keySet()) {
+            arbolL = arbol;
+            llenaAnimal(animal,arbolL);
+        }
+    }
+
+    private void llenaAnimal(String animal, BinaryTree<String> arbol) {
+        for (String direccion : mapaAnimales.get(animal)) {
+            if (arbol.hasChildren()) {
+                if (direccion.toUpperCase().equals("SI")) {
+                    arbol = arbol.getLeft();
+                } else {
+                    arbol = arbol.getRight();
+                }
+            } else {
+                if (direccion.toUpperCase().equals("SI")) {
+                    arbol.setLeft(new BinaryTree<>(animal));
+                } else {
+                    arbol.setRight(new BinaryTree<>(animal));
+                }
+            }
+        }
+    }
+
+    private void llenaAnimalV2(BinaryTree<String> arbol) {
         for (Map.Entry<String, ArrayList<String>> entry : mapaAnimales.entrySet()) {
             BinaryTree<String> temp = arbol;
-            int cont=1;
-            for(String resp : entry.getValue()){
-                if(cont < entry.getValue().size()){
-                    if(resp.toUpperCase().equals("SI")){
-                        temp=temp.getLeft();
-                    }else if(resp.toUpperCase().equals("NO")){
-                        temp=temp.getRight();
+            int cont = 1;
+            for (String resp : entry.getValue()) {
+                if (cont < entry.getValue().size()) {
+                    if (resp.toUpperCase().equals("SI")) {
+                        temp = temp.getLeft();
+                    } else if (resp.toUpperCase().equals("NO")) {
+                        temp = temp.getRight();
                     }
-                }else{
-                    if(resp.toUpperCase().equals("SI")){
+                } else {
+                    if (resp.toUpperCase().equals("SI")) {
                         temp.setLeft(new BinaryTree<>(entry.getKey()));
-                    }else if(resp.toUpperCase().equals("NO")){
+                    } else if (resp.toUpperCase().equals("NO")) {
                         temp.setRight(new BinaryTree<>(entry.getKey()));
                     }
                 }
                 cont++;
             }
-            
+
         }
     }
-    
-    
 
     /**
      * Generates a map with the directions of every animal in the tree.
