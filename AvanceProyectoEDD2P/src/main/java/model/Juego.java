@@ -1,14 +1,12 @@
 package model;
 
 import TDAs.BinaryTree;
-import Util.TreePrinter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -56,7 +54,6 @@ public class Juego {
         return respuestas;
     }
 
-    //Abre los archivos de preguntas y respuestas para devolver un mapa con el formato: <"Preguntas":[ArrayList<String>], "Respuestas":[ArrayList<String>]>
     private void obtenerDatos() {
         BufferedReader readerPreguntas;
         BufferedReader readerRespuestas;
@@ -91,7 +88,7 @@ public class Juego {
 
     public BinaryTree<String> crearArbol() {
         BinaryTree<String> arbol = crearArbol(0);
-        llenaAnimalV2(arbol);
+        llenaAnimal(arbol);
         return arbol;
     }
 
@@ -106,7 +103,7 @@ public class Juego {
         return arbol;
     }
     
-    private void llenaAnimalV2(BinaryTree<String> arbol){
+    private void llenaAnimal(BinaryTree<String> arbol){
         for (Map.Entry<String, ArrayList<String>> entry : mapaAnimales.entrySet()) {
             BinaryTree<String> temp = arbol;
             int cont=1;
