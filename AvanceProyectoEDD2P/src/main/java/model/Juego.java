@@ -105,52 +105,9 @@ public class Juego {
         }
         return arbol;
     }
-
-    private void llenaAnimal(BinaryTree<String> arbol) {
-        BinaryTree<String> arbolL;
-        for (String animal : mapaAnimales.keySet()) {
-            arbolL = arbol;
-            System.out.println(animal);
-            for (String direccion : mapaAnimales.get(animal)) {
-                System.out.println(direccion);
-                TreePrinter.print2D(arbol);
-                if (arbolL.hasChildren()) {
-                    if (direccion.equals("Si")) {
-                        arbolL = arbolL.getLeft();
-                    } else {
-                        arbolL = arbolL.getRight();
-                    }
-                } else {
-                    if (direccion.equals("Si")) {
-                        arbolL.setLeft(new BinaryTree<>(animal));
-                    } else {
-                        arbolL.setRight(new BinaryTree<>(animal));
-                    }
-                }
-            }
-            System.out.println("+" + "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" + "*");
-            TreePrinter.print2D(arbol);
-            System.out.println("+" + "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" + "*");
-        }
-    }
-
-    private void llenaAnimal(BinaryTree<String> arbol, String animal, int i) {
-        ArrayList<String> directions = mapaAnimales.get(animal);
-        if (arbol.hasChildren()) {
-            if (directions.get(i).equals("Si")) {
-                llenaAnimal(arbol.getLeft(), animal, i + 1);
-            } else {
-                llenaAnimal(arbol.getRight(), animal, i + 1);
-            }
-        } else {
-            arbol.setLeft(new BinaryTree("Perro"));
-            arbol.setRight(new BinaryTree("Perro"));
-        }
-    }
     
     private void llenaAnimalV2(BinaryTree<String> arbol){
         for (Map.Entry<String, ArrayList<String>> entry : mapaAnimales.entrySet()) {
-            
             BinaryTree<String> temp = arbol;
             int cont=1;
             for(String resp : entry.getValue()){
