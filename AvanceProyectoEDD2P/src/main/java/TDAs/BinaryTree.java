@@ -51,29 +51,31 @@ public class BinaryTree<E> {
     public BinaryTree getRight() {
         return this.root.getRight();
     }
-    
-    public boolean hasChildren(){
-        return this.root.getLeft()!=null || this.root.getRight()!=null;
+
+    public boolean hasChildren() {
+        return this.root.getLeft() != null || this.root.getRight() != null;
     }
-    
-    public boolean hasLeft(){
-        return this.root.getLeft()!=null;
+
+    public boolean hasLeft() {
+        return this.root.getLeft() != null;
     }
-    
-    public boolean hasRight(){
-        return this.root.getRight()!=null;
+
+    public boolean hasRight() {
+        return this.root.getRight() != null;
     }
 
     public LinkedList<E> preOrderTraversalRecursive() {
         LinkedList<E> traversal = new LinkedList<>();
         if (!this.isEmpty()) {
             traversal.add(this.getRootContent());
-        }
-        if (this.getLeft() != null) {
-            traversal.addAll(this.getLeft().preOrderTraversalRecursive());
-        }
-        if (this.getRight() != null) {
-            traversal.addAll(this.getRight().preOrderTraversalRecursive());
+        } else {
+
+            if (this.getLeft() != null) {
+                traversal.addAll(this.getLeft().preOrderTraversalRecursive());
+            }
+            if (this.getRight() != null) {
+                traversal.addAll(this.getRight().preOrderTraversalRecursive());
+            }
         }
         return traversal;
     }
@@ -87,7 +89,7 @@ public class BinaryTree<E> {
             if (!tree.isEmpty()) {
                 traversal.add(tree.getRootContent());
             }
-            if (tree.getRight()!= null && !tree.getRight().isEmpty()) {
+            if (tree.getRight() != null && !tree.getRight().isEmpty()) {
                 s.push(tree.getRight());
             }
             if (tree.getLeft() != null && !tree.getLeft().isEmpty()) {
@@ -96,8 +98,7 @@ public class BinaryTree<E> {
         }
         return traversal;
     }
-    
-    
+
     public LinkedList<E> breadthTraversal() {
         LinkedList<E> traversal = new LinkedList<>();
         Queue<BinaryTree<E>> q = new LinkedList<>();
@@ -110,18 +111,16 @@ public class BinaryTree<E> {
             if (tree.getLeft() != null && !tree.getLeft().isEmpty()) {
                 q.offer(tree.getLeft());
             }
-            if (tree.getRight()!= null && !tree.getRight().isEmpty()) {
+            if (tree.getRight() != null && !tree.getRight().isEmpty()) {
                 q.offer(tree.getRight());
             }
         }
         return traversal;
     }
-    
-    
+
     // CLASE INTERNA NECESITADA
-    
     class BinaryTreeNode<E> {
-    
+
         private E content;
         private BinaryTree<E> left;
         private BinaryTree<E> right;
@@ -163,5 +162,5 @@ public class BinaryTree<E> {
         }
 
     }
-    
+
 }
