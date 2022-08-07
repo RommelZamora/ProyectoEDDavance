@@ -23,6 +23,9 @@ public class BinaryTree<E> {
     public boolean isEmpty() {
         return this.root == null;
     }
+    public boolean isLeaf(){
+        return !hasChildren();
+    }
 
     public void setRootContent(E content) {
         this.root = new BinaryTreeNode<>(content);

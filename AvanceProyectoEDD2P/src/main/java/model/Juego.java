@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -94,9 +95,13 @@ public class Juego {
         }
         return 0;
     }
-    public BinaryTree<String> crearArbol(){
-        return crearArbol(0);
+
+    public BinaryTree<String> crearArbol() {
+        BinaryTree<String> arbol = crearArbol(0);
+        llenaAnimal(arbol);
+        return arbol;
     }
+
     private BinaryTree<String> crearArbol(int start) {
         int treeLength = getTreeLength();
         BinaryTree<String> arbol = new BinaryTree<>();
@@ -106,6 +111,42 @@ public class Juego {
             arbol.setRight(crearArbol(start + 1));
         }
         return arbol;
+    }
+
+    private void llenaAnimal(BinaryTree<String> arbol) {
+        BinaryTree<String> arbolL;
+        arbolL = arbol;
+        for (String animal : mapaAnimales.keySet()) {
+            for (String direccion : mapaAnimales.get(animal)) {
+                if (arbolL.hasChildren()) {
+                    if (direccion.equals("Si")) {
+                        arbolL = arbolL.getLeft();
+                    } else {
+                        arbolL = arbolL.getRight();
+                    }
+                } else {
+                    if (direccion.equals("Si")) {
+                        arbolL.setLeft(new BinaryTree<>(animal));
+                    } else {
+                        arbolL.setRight(new BinaryTree<>(animal));
+                    }
+                }
+            }
+        }
+    }
+
+    private void llenaAnimal(BinaryTree<String> arbol, String animal, int i) {
+        ArrayList<String> directions = mapaAnimales.get(animal);
+        if (arbol.hasChildren()) {
+            if (directions.get(i).equals("Si")) {
+                llenaAnimal(arbol.getLeft(), animal, i + 1);
+            } else {
+                llenaAnimal(arbol.getRight(), animal, i + 1);
+            }
+        } else {
+            arbol.setLeft(new BinaryTree("Perro"));
+            arbol.setRight(new BinaryTree("Perro"));
+        }
     }
 
     /**
