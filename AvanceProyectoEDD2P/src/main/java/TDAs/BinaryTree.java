@@ -7,7 +7,6 @@ import java.util.Stack;
 public class BinaryTree<E> {
 
     private BinaryTreeNode<E> root;
-
     public BinaryTree(E rootContent) {
         this.root = new BinaryTreeNode<>(rootContent);
     }
@@ -23,7 +22,8 @@ public class BinaryTree<E> {
     public boolean isEmpty() {
         return this.root == null;
     }
-    public boolean isLeaf(){
+
+    public boolean isLeaf() {
         return !hasChildren();
     }
 
@@ -66,6 +66,8 @@ public class BinaryTree<E> {
     public boolean hasRight() {
         return this.root.getRight() != null;
     }
+
+
 
     public LinkedList<E> preOrderTraversalRecursive() {
         LinkedList<E> traversal = new LinkedList<>();

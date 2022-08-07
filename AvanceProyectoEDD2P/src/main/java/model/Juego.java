@@ -1,6 +1,7 @@
 package model;
 
 import TDAs.BinaryTree;
+import Util.TreePrinter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -30,10 +31,8 @@ public class Juego {
     public Juego(File preguntas, File respuestas) {
         this.filePreguntas = preguntas;
         this.fileRespuestas = respuestas;
-
         this.txtPreguntas = filePreguntas.getName();
         this.txtRespuestas = fileRespuestas.getName();
-
         this.datosJuego = new BinaryTree<>();
     }
 
@@ -63,27 +62,21 @@ public class Juego {
         BufferedReader readerRespuestas;
         preguntas = new ArrayList<>();
         respuestas = new ArrayList<>();
-
         try {
             readerPreguntas = new BufferedReader(new FileReader(filePreguntas));
             readerRespuestas = new BufferedReader(new FileReader(fileRespuestas));
-
             String pregunta = readerPreguntas.readLine();
             String respuesta = readerRespuestas.readLine();
-
             while (pregunta != null) {
                 preguntas.add(pregunta);
                 pregunta = readerPreguntas.readLine();
             }
-
             while (respuesta != null) {
                 respuestas.add(respuesta);
                 respuesta = readerRespuestas.readLine();
             }
-
             readerPreguntas.close();
             readerRespuestas.close();
-
         } catch (IOException e) {
             System.out.println("No se pudo abrir los archivos: ");
         }
@@ -115,9 +108,12 @@ public class Juego {
 
     private void llenaAnimal(BinaryTree<String> arbol) {
         BinaryTree<String> arbolL;
-        arbolL = arbol;
         for (String animal : mapaAnimales.keySet()) {
+            arbolL = arbol;
+            System.out.println(animal);
             for (String direccion : mapaAnimales.get(animal)) {
+                System.out.println(direccion);
+                TreePrinter.print2D(arbol);
                 if (arbolL.hasChildren()) {
                     if (direccion.equals("Si")) {
                         arbolL = arbolL.getLeft();
@@ -132,6 +128,9 @@ public class Juego {
                     }
                 }
             }
+            System.out.println("+" + "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" + "*");
+            TreePrinter.print2D(arbol);
+            System.out.println("+" + "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" + "*");
         }
     }
 
