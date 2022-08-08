@@ -1,7 +1,6 @@
 package model;
 
 import TDAs.BinaryTree;
-import Util.TreePrinter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,11 +8,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Stack;
 
 /**
  *
- * @author Grupo 3
+ * @author Grupo 8
  */
 public class Juego {
 
@@ -26,26 +28,23 @@ public class Juego {
     private ArrayList<String> respuestas;
     Map<String, ArrayList<String>> mapaAnimales;
 
-    private BinaryTree<JuegoDatos> datosJuego;
+    private BinaryTree<String> arbol;
 
     public Juego(File preguntas, File respuestas) {
         this.filePreguntas = preguntas;
         this.fileRespuestas = respuestas;
         this.txtPreguntas = filePreguntas.getName();
         this.txtRespuestas = fileRespuestas.getName();
-        this.datosJuego = new BinaryTree<>();
     }
 
     public Juego(String pathArchivoPreguntas, String pathArchivoRespuestas) {
         this.filePreguntas = new File(pathArchivoPreguntas);
         this.fileRespuestas = new File(pathArchivoRespuestas);
-
         this.txtRespuestas = fileRespuestas.getName();
         this.txtPreguntas = filePreguntas.getName();
-
-        this.datosJuego = new BinaryTree<>();
         obtenerDatos();
         getAnimalDirectionMap();
+        crearArbol();
     }
 
     public ArrayList<String> getPreguntas() {
@@ -89,28 +88,28 @@ public class Juego {
         return 0;
     }
 
-    public BinaryTree<String> crearArbol() {
-        BinaryTree<String> arbol = crearArbol(0);
-        llenaAnimales(arbol);
-        return arbol;
+    private void crearArbol() {
+        BinaryTree<String> tmpTree = crearArbol(0);
+        llenaAnimales(tmpTree);
+        this.arbol = tmpTree;
     }
 
     private BinaryTree<String> crearArbol(int start) {
         int treeLength = getTreeLength();
-        BinaryTree<String> arbol = new BinaryTree<>();
-        arbol.setRootContent(preguntas.get(start));
+        BinaryTree<String> tmpTree = new BinaryTree<>();
+        tmpTree.setRootContent(preguntas.get(start));
         if (start != treeLength - 1) {
-            arbol.setLeft(crearArbol(start + 1));
-            arbol.setRight(crearArbol(start + 1));
+            tmpTree.setLeft(crearArbol(start + 1));
+            tmpTree.setRight(crearArbol(start + 1));
         }
-        return arbol;
+        return tmpTree;
     }
 
     private void llenaAnimales(BinaryTree<String> arbol) {
         BinaryTree<String> arbolL;
         for (String animal : mapaAnimales.keySet()) {
             arbolL = arbol;
-            llenaAnimal(animal,arbolL);
+            llenaAnimal(animal, arbolL);
         }
     }
 
@@ -132,28 +131,48 @@ public class Juego {
         }
     }
 
-    private void llenaAnimalV2(BinaryTree<String> arbol) {
-        for (Map.Entry<String, ArrayList<String>> entry : mapaAnimales.entrySet()) {
-            BinaryTree<String> temp = arbol;
-            int cont = 1;
-            for (String resp : entry.getValue()) {
-                if (cont < entry.getValue().size()) {
-                    if (resp.toUpperCase().equals("SI")) {
-                        temp = temp.getLeft();
-                    } else if (resp.toUpperCase().equals("NO")) {
-                        temp = temp.getRight();
-                    }
-                } else {
-                    if (resp.toUpperCase().equals("SI")) {
-                        temp.setLeft(new BinaryTree<>(entry.getKey()));
-                    } else if (resp.toUpperCase().equals("NO")) {
-                        temp.setRight(new BinaryTree<>(entry.getKey()));
-                    }
-                }
-                cont++;
+    public void play() {
+        BinaryTree<String> temp = arbol;
+        int cont = 0;
+        System.out.println("Bienvenido (a), vamos a jugar.\n¿Listo?");
+        String resp;
+        Stack<BinaryTree<String>> pila = new Stack<>();
+        while (cont != this.getTreeLength()) {
+            String question = temp.getRootContent();
+            resp = yesOrNo(question);
+            pila.push(temp);
+            if (resp.toUpperCase().equals("SI")) {
+                temp = temp.getLeft();
+            } else {
+                temp = temp.getRight();
             }
-
+            cont++;
         }
+        showResults(temp,pila);        
+    }
+    private void showResults(BinaryTree<String> arbol, Stack<BinaryTree<String>> pila){
+        if (arbol != null) {
+            System.out.println("El animal es:");
+            System.out.println(arbol.getRootContent());
+        } else {
+            List<String> posiblesResp = pila.pop().preOrderTraversalIterative();
+            posiblesResp = posiblesResp.stream().filter(a->!a.contains("?")).toList();
+            String posiblesString = String.join(", ", posiblesResp);
+            System.out.println("El animal podría ser un...");
+            System.out.println(posiblesString);
+        }
+        
+    }
+    private String yesOrNo(String question) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(question);
+        String resp = sc.nextLine();
+        while (!(resp.toUpperCase().equals("SI") || resp.toUpperCase().equals("NO"))) {
+            System.out.println("Debe escribir 'SI' o 'NO'");
+            System.out.println(question);
+            resp = sc.nextLine();
+        }
+        return resp;
     }
 
     /**
@@ -169,85 +188,4 @@ public class Juego {
             }
         }
     }
-
-    public BinaryTree<JuegoDatos> crearArbol(Map<String, ArrayList<String>> mapaDatos) {
-
-        //Primero convierte la lista de respuestas en un mapa con el formato: <"Animal 1":["Si", "No", "Si"].....>
-        Map<String, ArrayList<String>> mapaAnimales = new HashMap<>();
-
-        for (String animal : mapaDatos.get("Respuestas")) {
-            String[] lista = animal.split(" ");
-            for (int i = 0; i < lista.length; i++) {
-                if (i == 0) {
-                    mapaAnimales.put(lista[i], new ArrayList<>());
-                } else {
-                    mapaAnimales.get(lista[0]).add(lista[i]);
-                }
-            }
-        }
-
-        //El arbol se crea desde arriba, con la primera pregunta y una lista con todos los animales que son posibles respuestas
-        BinaryTree<JuegoDatos> arbol = new BinaryTree<>(new JuegoDatos(mapaDatos.get("Preguntas").get(0)));
-        //Iterador para recorrer el mapa de animales con sus respuestas respectivas
-
-        for (Map.Entry<String, ArrayList<String>> entry : mapaAnimales.entrySet()) {
-            arbol.getRootContent().addAnimal(entry.getKey());
-
-            //Utiliza un contador y un nodo viajero para poder crear los hijos que sean necesarios dentro del arbol
-            // o recorrerlos si ya estan creados
-            BinaryTree<JuegoDatos> temp = arbol;
-            int cont = 0;
-
-            for (String siNo : entry.getValue()) {
-                cont++;
-                if (cont == mapaDatos.get("Preguntas").size()) {
-                    if (siNo.toUpperCase().equals("SI")) {
-                        if (temp.hasLeft()) {
-                            temp = temp.getLeft();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        } else {
-                            temp.setLeft(new BinaryTree<>(new JuegoDatos("Hoja de respuesta " + entry.getKey())));
-                            temp = temp.getLeft();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        }
-                    } else {
-                        if (temp.hasRight()) {
-                            temp = temp.getRight();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        } else {
-                            temp.setRight(new BinaryTree<>(new JuegoDatos("Hoja de respuesta " + entry.getKey())));
-                            temp = temp.getRight();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        }
-                    }
-                } else {
-                    if (siNo.toUpperCase().equals("SI")) {
-                        if (temp.hasLeft()) {
-                            temp = temp.getLeft();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        } else {
-                            temp.setLeft(new BinaryTree<>(new JuegoDatos(mapaDatos.get("Preguntas").get(cont))));
-                            temp = temp.getLeft();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        }
-                    } else {
-                        if (temp.hasRight()) {
-                            temp = temp.getRight();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        } else {
-                            temp.setRight(new BinaryTree<>(new JuegoDatos(mapaDatos.get("Preguntas").get(cont))));
-                            temp = temp.getRight();
-                            temp.getRootContent().addAnimal(entry.getKey());
-                        }
-                    }
-                }
-
-            }
-        }
-
-        //LOS ANIMALES QUE SE ENCUENTRAN EN LA LISTA SON LA RESPUESTAS A LA PREGUNTA DEL NODO PADRE, 
-        //SI ES SI O NO DEPENDE DE SI ES HIJO IZQ OR DER
-        return arbol;
-    }
-
 }
